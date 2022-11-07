@@ -36,15 +36,12 @@ class StudentController extends Controller
         //     'email' => $request->email,
         //     'jurusan' => $request->jurusan
         // ];
-
         // $student = Student::create($input);
         // $data = [
         //     'message' => 'Student is created successfully',
         //     'data' => $student
         // ];
-
         // return response()->json($data, 201);
-
 
         # REQUIRED USING SAVE
         $student = new Student;
@@ -53,13 +50,38 @@ class StudentController extends Controller
         $student->email = $request->input('email');
         $student->jurusan = $request->input('jurusan');
         $student->save();
-    
         $data = [
             'message' => 'Students is created successfully',
             'data' => $student
         ];
-    
         return response()->json($data, 201);
+
+        # NO REQUIRED (DEFAULT) USING CREATE
+        // $input = [
+        //     'nama' => $request->nama ?? 'NULL',
+        //     'nim' => $request->nim ?? 'NULL',
+        //     'email' => $request->email ?? 'NULL',
+        //     'jurusan' => $request->jurusan ?? 'NULL'
+        // ];
+        // $student = Student::create($input);
+        // $data = [
+        //     'message' => 'Student is created successfully',
+        //     'data' => $student
+        // ];
+        // return response()->json($data, 201);
+
+        # NO REQUIRED (DEFAULT) USING SAVE
+        // $student = new Student;
+        // $student->nama = $request->input('nama') ?? 'NULL';
+        // $student->nim = $request->input('nim') ?? 'NULL';
+        // $student->email = $request->input('email') ?? 'NULL';
+        // $student->jurusan = $request->input('jurusan') ?? 'NULL';
+        // $student->save();
+        // $data = [
+        //     'message' => 'Students is created successfully',
+        //     'data' => $student
+        // ];
+        // return response()->json($data, 201);
     }
 
     public function update(Request $request, $id) {
