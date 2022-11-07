@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
-use PHPUnit\Framework\MockObject\Builder\Stub;
 
 class StudentController extends Controller
 {
@@ -38,15 +37,22 @@ class StudentController extends Controller
 
     public function update(Request $request, $id) {
         
-        Student::where('id', $id)
-        ->update([
-            'nama' => $request->nama,
-            'nim' => $request->nim,
-            'email' => $request->email,
-            'jurusan' => $request->jurusan
-        ]);
+        ## REQUIRED
+        // Student::where('id', $id)->update([
+        //     'nama' => $request->nama,
+        //     'nim' => $request->nim,
+        //     'email' => $request->email,
+        //     'jurusan' => $request->jurusan
+        // ]);
         
         $student = Student::find($id);
+
+        $student->nama = $request->input('nama') ?? $student->nama;
+        $student->nim = $request->input('nim') ?? $student->nim;
+        $student->email = $request->input('email') ?? $student->email;
+        $student->jurusan = $request->input('nama') ?? $student->jurusan;
+
+        $student->save();
         
         $data = [
             'message' => 'Student is updated successfully',
