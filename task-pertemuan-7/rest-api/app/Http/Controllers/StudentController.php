@@ -29,59 +29,22 @@ class StudentController extends Controller
     }
     
     public function store(Request $request) {
-        # REQUIRED USING CREATE
-        // $input = [
-        //     'nama' => $request->nama,
-        //     'nim' => $request->nim,
-        //     'email' => $request->email,
-        //     'jurusan' => $request->jurusan
-        // ];
-        // $student = Student::create($input);
-        // $data = [
-        //     'message' => 'Student is created successfully',
-        //     'data' => $student
-        // ];
-        // return response()->json($data, 201);
 
-        # REQUIRED USING SAVE
-        $student = new Student;
-        $student->nama = $request->input('nama');
-        $student->nim = $request->input('nim');
-        $student->email = $request->input('email');
-        $student->jurusan = $request->input('jurusan');
-        $student->save();
+        $validatedData = $request->validate([
+            'nama' => 'required',
+            'nim' => 'numeric|required',
+            'email' => 'email|required',
+            'jurusan' => 'required'
+        ]);
+
+        $student = Student::create($validatedData);
+
         $data = [
-            'message' => 'Students is created successfully',
+            'message' => 'Student is created successfully',
             'data' => $student
         ];
+
         return response()->json($data, 201);
-
-        # NO REQUIRED (DEFAULT) USING CREATE
-        // $input = [
-        //     'nama' => $request->nama ?? 'NULL',
-        //     'nim' => $request->nim ?? 'NULL',
-        //     'email' => $request->email ?? 'NULL',
-        //     'jurusan' => $request->jurusan ?? 'NULL'
-        // ];
-        // $student = Student::create($input);
-        // $data = [
-        //     'message' => 'Student is created successfully',
-        //     'data' => $student
-        // ];
-        // return response()->json($data, 201);
-
-        # NO REQUIRED (DEFAULT) USING SAVE
-        // $student = new Student;
-        // $student->nama = $request->input('nama') ?? 'NULL';
-        // $student->nim = $request->input('nim') ?? 'NULL';
-        // $student->email = $request->input('email') ?? 'NULL';
-        // $student->jurusan = $request->input('jurusan') ?? 'NULL';
-        // $student->save();
-        // $data = [
-        //     'message' => 'Students is created successfully',
-        //     'data' => $student
-        // ];
-        // return response()->json($data, 201);
     }
 
     public function update(Request $request, $id) {
