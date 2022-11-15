@@ -139,6 +139,7 @@ class PatientController extends Controller
 
         $patients = DB::table('patients')
                     ->where('name', '=', $name)
+                    ->orWhere('name', 'LIKE', '%' . $name . '%')
                     ->get();
 
         if ($patients) {
