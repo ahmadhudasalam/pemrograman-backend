@@ -35,6 +35,7 @@ const update = (position, name) => {
 // }
 const destroy = (position) => {
     fruits.splice(position, 1);
+    // delete fruits[position];
     index();
 }
 
