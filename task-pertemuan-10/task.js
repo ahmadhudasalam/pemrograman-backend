@@ -36,10 +36,10 @@ const showDownload = async (result) => {
   console.log(`Hasil Download: ${result}`);
 };
 
-const download = async (callShowDownload) => {
+const download = async (ShowDownload) => {
   setTimeout(async () => {
     const result = "windows-10.exe";
-    await callshowDownload(result);
+    await showDownload(result);
     }, 3000);
 };
 
