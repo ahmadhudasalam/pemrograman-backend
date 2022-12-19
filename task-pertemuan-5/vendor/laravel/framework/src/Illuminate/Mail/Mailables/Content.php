@@ -39,13 +39,6 @@ class Content
     public $markdown;
 
     /**
-     * The pre-rendered HTML of the message.
-     *
-     * @var string|null
-     */
-    public $htmlString;
-
-    /**
      * The message's view data.
      *
      * @var array
@@ -60,18 +53,16 @@ class Content
      * @param  string|null  $text
      * @param  string|null  $markdown
      * @param  array  $with
-     * @param  string|null  $htmlString
      *
      * @named-arguments-supported
      */
-    public function __construct(string $view = null, string $html = null, string $text = null, $markdown = null, array $with = [], string $htmlString = null)
+    public function __construct(string $view = null, string $html = null, string $text = null, $markdown = null, array $with = [])
     {
         $this->view = $view;
         $this->html = $html;
         $this->text = $text;
         $this->markdown = $markdown;
         $this->with = $with;
-        $this->htmlString = $htmlString;
     }
 
     /**
@@ -120,19 +111,6 @@ class Content
     public function markdown(string $view)
     {
         $this->markdown = $view;
-
-        return $this;
-    }
-
-    /**
-     * Set the pre-rendered HTML for the message.
-     *
-     * @param  string  $html
-     * @return $this
-     */
-    public function htmlString(string $html)
-    {
-        $this->htmlString = $html;
 
         return $this;
     }
