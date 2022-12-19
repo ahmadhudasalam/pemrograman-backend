@@ -13,7 +13,7 @@ use function crc32;
 final class ShardedPrefixPublicUrlGenerator implements PublicUrlGenerator
 {
     /** @var PathPrefixer[] */
-    private array $prefixes;
+    private array $prefixers;
     private int $count;
 
     /**
@@ -27,13 +27,13 @@ final class ShardedPrefixPublicUrlGenerator implements PublicUrlGenerator
             throw new InvalidArgumentException('At least one prefix is required.');
         }
 
-        $this->prefixes = array_map(static fn (string $prefix) => new PathPrefixer($prefix, '/'), $prefixes);
+        $this->prefixers = array_map(static fn (string $prefix) => new PathPrefixer($prefix, '/'), $prefixes);
     }
 
     public function publicUrl(string $path, Config $config): string
     {
         $index = abs(crc32($path)) % $this->count;
 
-        return $this->prefixes[$index]->prefixPath($path);
+        return $this->prefixers[$index]->prefixPath($path);
     }
 }

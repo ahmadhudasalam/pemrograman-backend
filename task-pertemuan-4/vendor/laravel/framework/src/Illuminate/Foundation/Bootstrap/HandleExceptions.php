@@ -17,7 +17,7 @@ class HandleExceptions
     /**
      * Reserved memory so that errors can be displayed properly on memory exhaustion.
      *
-     * @var string|null
+     * @var string
      */
     public static $reservedMemory;
 
@@ -102,7 +102,10 @@ class HandleExceptions
      */
     public function handleDeprecationError($message, $file, $line, $level = E_DEPRECATED)
     {
-        if ($this->shouldIgnoreDeprecationErrors()) {
+        if (! class_exists(LogManager::class)
+            || ! static::$app->hasBeenBootstrapped()
+            || static::$app->runningUnitTests()
+        ) {
             return;
         }
 
@@ -125,18 +128,6 @@ class HandleExceptions
                 ));
             }
         });
-    }
-
-    /**
-     * Determine if deprecation errors should be ignored.
-     *
-     * @return bool
-     */
-    protected function shouldIgnoreDeprecationErrors()
-    {
-        return ! class_exists(LogManager::class)
-            || ! static::$app->hasBeenBootstrapped()
-            || static::$app->runningUnitTests();
     }
 
     /**

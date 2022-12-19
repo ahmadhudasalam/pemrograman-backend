@@ -62,27 +62,12 @@ class CompilerEngine extends PhpEngine
             $this->compiler->compile($path);
         }
 
+        $this->compiledOrNotExpired[$path] = true;
+
         // Once we have the path to the compiled file, we will evaluate the paths with
         // typical PHP just like any other templates. We also keep a stack of views
         // which have been rendered for right exception messages to be generated.
-
-        try {
-            $results = $this->evaluatePath($this->compiler->getCompiledPath($path), $data);
-        } catch (ViewException $e) {
-            if (! str($e->getMessage())->contains(['No such file or directory', 'File does not exist at path'])) {
-                throw $e;
-            }
-
-            if (! isset($this->compiledOrNotExpired[$path])) {
-                throw $e;
-            }
-
-            $this->compiler->compile($path);
-
-            $results = $this->evaluatePath($this->compiler->getCompiledPath($path), $data);
-        }
-
-        $this->compiledOrNotExpired[$path] = true;
+        $results = $this->evaluatePath($this->compiler->getCompiledPath($path), $data);
 
         array_pop($this->lastCompiled);
 

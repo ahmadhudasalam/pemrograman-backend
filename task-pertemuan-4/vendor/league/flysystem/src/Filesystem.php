@@ -18,18 +18,24 @@ class Filesystem implements FilesystemOperator
 {
     use CalculateChecksumFromStream;
 
+    private FilesystemAdapter $adapter;
     private Config $config;
     private PathNormalizer $pathNormalizer;
+    private ?PublicUrlGenerator $publicUrlGenerator;
+    private ?TemporaryUrlGenerator $temporaryUrlGenerator;
 
     public function __construct(
-        private FilesystemAdapter $adapter,
+        FilesystemAdapter $adapter,
         array $config = [],
         PathNormalizer $pathNormalizer = null,
-        private ?PublicUrlGenerator $publicUrlGenerator = null,
-        private ?TemporaryUrlGenerator $temporaryUrlGenerator = null,
+        PublicUrlGenerator $publicUrlGenerator = null,
+        TemporaryUrlGenerator $temporaryUrlGenerator = null,
     ) {
+        $this->adapter = $adapter;
         $this->config = new Config($config);
         $this->pathNormalizer = $pathNormalizer ?: new WhitespacePathNormalizer();
+        $this->publicUrlGenerator = $publicUrlGenerator;
+        $this->temporaryUrlGenerator = $temporaryUrlGenerator;
     }
 
     public function fileExists(string $location): bool
@@ -174,7 +180,7 @@ class Filesystem implements FilesystemOperator
         $generator = $this->temporaryUrlGenerator ?: $this->adapter;
 
         if ($generator instanceof TemporaryUrlGenerator) {
-            return $generator->temporaryUrl($path, $expiresAt, $this->config->extend($config));
+            return $this->temporaryUrlGenerator->temporaryUrl($path, $expiresAt, $this->config->extend($config));
         }
 
         throw UnableToGenerateTemporaryUrl::noGeneratorConfigured($path);
